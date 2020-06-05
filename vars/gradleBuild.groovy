@@ -16,3 +16,19 @@ def call() {
     } finally {
     }
 }
+
+def build() {
+    try {
+       echo 'Build Started'
+       //currentBuild.displayName = "${env.BUILD_NUMBER + '-' + SHORT_GIT_COMMIT}"
+       //buildVersionNumber = env.BUILD_NUMBER + '-' + SHORT_GIT_COMMIT + buildType
+       currentBuild.result = "FAILED"
+        sh 'chmod +x ./gradlew'
+       sh './gradlew clean build '
+       archiveArtifacts 'build/libs/*'
+    } catch (e) {
+       currentBuild.result = "FAILED"
+       throw e
+    } finally {
+    }
+}
